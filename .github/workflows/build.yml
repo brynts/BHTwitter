@@ -176,9 +176,7 @@ jobs:
           name: v${{ env.BHTWITTER_VERSION }} - BHTwitter
           files: main/packages/${{ steps.package_name.outputs.package }}
           draft: true
-
-OUTPUT"
-
+          
       - name: Install pyupload
         run: |
           pip install pyupload
