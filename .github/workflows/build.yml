@@ -39,6 +39,11 @@ on:
         type: boolean
       create_release:
         description: "Create a draft release (Private)"
+        default: false
+        required: false
+        type: boolean
+      upload_catbox:
+        description: "Upload to Catbox"
         default: true
         required: false
         type: boolean
@@ -171,3 +176,20 @@ jobs:
           name: v${{ env.BHTWITTER_VERSION }} - BHTwitter
           files: main/packages/${{ steps.package_name.outputs.package }}
           draft: true
+
+OUTPUT"
+
+      - name: Install pyupload
+        run: |
+          pip install pyupload
+
+      - name: Upload file to Catbox
+        id: upload_catbox
+        run: |
+          UPLOAD_OUTPUT=$(pyupload main/packages/${{ steps.package_name.outputs.package }} --host=catbox)
+          echo "Upload Output: $UPLOAD_OUTPUT"
+          
+          LINK=$(echo "$UPLOAD_OUTPUT" | sed -n 's/.*Your link : //p')
+          echo "Uploaded file link: $LINK"
+          
+          echo "catbox_link=$LINK" >> $GITHUB_ENV
