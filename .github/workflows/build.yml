@@ -27,6 +27,11 @@ on:
           - sideloaded
           - trollstore
           - rootless
+      enable_tna:
+        description: "Integrate TwitterNoAds"
+        type: boolean
+        required: true
+        default: false
       commit_id:
         description: "(Optional) Commit ID to build at"
         default: ""
@@ -121,6 +126,12 @@ jobs:
           echo "$X_VERSION"
         env:
           IPA_URL: ${{ inputs.decrypted_ipa_url }}
+
+      - name: Download TwitterNoAds
+        if: ${{ inputs.enable_tna }}
+        run: |
+          tna_url="https://p2kdev.github.io/repo/debs/com.p2kdev.twitternoads_1.2.5_iphoneos-arm64.deb"
+          wget "$tna_url" --no-verbose -O main/packages/tna.deb
 
       - name: Build Package
         run: |
